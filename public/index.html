@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>YENGENİZİN DÖNMESİNE | 24 Aralık 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --bg-base: #121018;
+            --card-bg: rgba(28, 24, 38, 0.46);
+            --card-border: rgba(255, 241, 242, 0.11);
+            --card-highlight: rgba(255, 241, 242, 0.22);
+            --text-primary: #fff8f9;
+            --text-secondary: #e2d9e8;
+            --text-muted: #b8aec4;
+            --soft-rose: #fda4af;
+            --soft-lavender: #d8b4fe;
+            --soft-sky: #a5b4fc;
+            --soft-peach: #fed7aa;
+            --soft-mint: #6ee7b7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Arka Planda Yumuşak Geçişli Fotoğraf Slaytı */
+        .slideshow-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            inset: -20px;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transform: scale(1.06);
+            filter: blur(8px) brightness(0.42) saturate(1.15);
+            transition: opacity 2.8s cubic-bezier(0.4, 0, 0.2, 1), transform 10s ease-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Sıcak ve Yumuşak Ortam Katmanı */
+        .soft-overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 45%, rgba(28, 22, 38, 0.25) 0%, rgba(16, 13, 24, 0.78) 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Yumuşak Yüzen Pastel Işık Küreleri */
+        .ambient-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(95px);
+            z-index: 2;
+            pointer-events: none;
+            animation: gentleFloat 16s ease-in-out infinite alternate;
+        }
+
+        .blob-1 {
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(253, 164, 175, 0.24), transparent 70%);
+            top: -80px;
+            left: -60px;
+        }
+
+        .blob-2 {
+            width: 420px;
+            height: 420px;
+            background: radial-gradient(circle, rgba(216, 180, 254, 0.22), transparent 70%);
+            bottom: -90px;
+            right: -60px;
+            animation-delay: -6s;
+        }
+
+        .blob-3 {
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(254, 215, 170, 0.16), transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-duration: 20s;
+        }
+
+        @keyframes gentleFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(28px, -22px) scale(1.08); }
+        }
+
+        /* Ana Taşıyıcı Kart (Yumuşak Buzlu Cam) */
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-top: 1px solid var(--card-highlight);
+            border-radius: 38px;
+            padding: 46px 38px 34px;
+            backdrop-filter: blur(32px) saturate(130%);
+            -webkit-backdrop-filter: blur(32px) saturate(130%);
+            box-shadow: 
+                0 28px 65px -12px rgba(8, 6, 14, 0.65),
+                0 0 40px rgba(253, 164, 175, 0.06),
+                inset 0 1px 1px 0 rgba(255, 255, 255, 0.14);
+            text-align: center;
+        }
+
+        /* Üst Durum Rozeti */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            padding: 7px 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 22px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--soft-mint);
+            box-shadow: 0 0 12px rgba(110, 231, 183, 0.7);
+            animation: softPulse 2.6s ease-in-out infinite;
+        }
+
+        @keyframes softPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.82); }
+        }
+
+        /* Başlık ve Alt Başlık */
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(1.75rem, 4.4vw, 2.7rem);
+            font-weight: 600;
+            letter-spacing: -0.015em;
+            line-height: 1.2;
+            margin-bottom: 12px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 15%, #ffe4e6 60%, #f3e8ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 0.98rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 36px;
+            opacity: 0.9;
+        }
+
+        .subtitle strong {
+            color: #fff;
+            font-weight: 500;
+        }
+
+        /* Sayaç Izgarası */
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .unit-card {
+            position: relative;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.065) 0%, rgba(255, 255, 255, 0.02) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 26px;
+            padding: 22px 12px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), background 0.35s ease, border-color 0.35s ease;
+        }
+
+        .unit-card:hover {
+            transform: translateY(-4px);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.03) 100%);
+            border-color: rgba(253, 164, 175, 0.28);
+        }
+
+        /* Yumuşak Dairesel Halka */
+        .ring-wrapper {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-ring {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+            filter: drop-shadow(0 0 8px rgba(253, 164, 175, 0.25));
+        }
+
+        .progress-ring-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.07);
+            stroke-width: 5;
+        }
+
+        .progress-ring-fill {
+            fill: none;
+            stroke: url(#softGrad);
+            stroke-width: 5;
+            stroke-linecap: round;
+            stroke-dasharray: 295.31;
+            stroke-dashoffset: 295.31;
+            transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .number-value {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.35rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+            line-height: 1;
+            transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), color 0.25s ease;
+        }
+
+        .number-value.tick {
+            transform: scale(1.05);
+            color: #ffe4e6;
+        }
+
+        .unit-label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        /* Alt Bilgi Çubuğu */
+        .footer-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .timezone-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.78rem;
+            opacity: 0.85;
+        }
+
+        .test-btn {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .test-btn:hover {
+            background: rgba(253, 164, 175, 0.18);
+            color: #fff;
+            border-color: rgba(253, 164, 175, 0.35);
+            transform: translateY(-1px);
+        }
+
+        /* Kutlama Ekranı */
+        .celebration-box {
+            display: none;
+            padding: 36px 20px;
+            animation: softFadeIn 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .celebration-box.active {
+            display: block;
+        }
+
+        .celebration-emoji {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            display: inline-block;
+            animation: gentleBounce 2s ease-in-out infinite;
+        }
+
+        .celebration-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: clamp(2.6rem, 9vw, 5.2rem);
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: 0.02em;
+            background: linear-gradient(90deg, #ffe4e6, #fda4af, #d8b4fe, #a5b4fc, #fda4af, #ffe4e6);
+            background-size: 300% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 14px;
+            animation: shimmer 4s linear infinite, popIn 0.9s cubic-bezier(0.22, 1.4, 0.36, 1) both;
+            filter: drop-shadow(0 0 22px rgba(253, 164, 175, 0.45));
+        }
+
+        @keyframes shimmer {
+            from { background-position: 0% 50%; }
+            to { background-position: 300% 50%; }
+        }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.6); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Kutlamada üst başlığı gizle */
+        .celebrating #mainTitle,
+        .celebrating #mainSubtitle {
+            display: none;
+        }
+
+        @keyframes softFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes gentleBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        @media (max-width: 680px) {
+            .main-wrapper {
+                padding: 32px 18px 26px;
+                border-radius: 30px;
+            }
+            .countdown-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+            .unit-card {
+                border-radius: 22px;
+                padding: 18px 10px 16px;
+            }
+            .ring-wrapper {
+                width: 94px;
+                height: 94px;
+            }
+            .number-value {
+                font-size: 2rem;
+            }
+            .footer-bar {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Yumuşak Pastel SVG Gradyan -->
+    <svg width="0" height="0" style="position:absolute">
+        <defs>
+            <linearGradient id="softGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fda4af" />
+                <stop offset="50%" stop-color="#d8b4fe" />
+                <stop offset="100%" stop-color="#a5b4fc" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- Fotoğraf Slayt Gösterisi -->
+    <div class="slideshow-bg">
+        <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&q=80&w=1200');"></div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&q=80&w=1200');"></div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1499002238440-d264edd596ec?auto=format&fit=crop&q=80&w=1200');"></div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=1200');"></div>
+        <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&q=80&w=1200');"></div>
+    </div>
+
+    <!-- Yumuşak Ortam Katmanı ve Yüzen Işıklar -->
+    <div class="soft-overlay"></div>
+    <div class="ambient-blob blob-1"></div>
+    <div class="ambient-blob blob-2"></div>
+    <div class="ambient-blob blob-3"></div>
+
+    <main class="main-wrapper">
+        <div class="status-badge" id="statusBadge">
+            <span class="pulse-dot"></span>
+            <span id="statusText">CANLI GERİ SAYIM</span>
+        </div>
+
+        <h1 id="mainTitle"><span class="gradient-text">YENGENİZİN DÖNMESİNE</span> 😍😍😍</h1>
+        <p class="subtitle" id="mainSubtitle">Hedef Tarih: <strong>24 Aralık 2026 • 00:00</strong></p>
+
+        <div id="countdownContainer">
+            <div class="countdown-grid">
+                <div class="unit-card">
+                    <div class="ring-wrapper">
+                        <svg class="progress-ring" viewBox="0 0 104 104">
+                            <circle class="progress-ring-bg" cx="52" cy="52" r="47"></circle>
+                            <circle class="progress-ring-fill" id="ring-days" cx="52" cy="52" r="47"></circle>
+                        </svg>
+                        <span class="number-value" id="days">00</span>
+                    </div>
+                    <span class="unit-label">Gün</span>
+                </div>
+
+                <div class="unit-card">
+                    <div class="ring-wrapper">
+                        <svg class="progress-ring" viewBox="0 0 104 104">
+                            <circle class="progress-ring-bg" cx="52" cy="52" r="47"></circle>
+                            <circle class="progress-ring-fill" id="ring-hours" cx="52" cy="52" r="47"></circle>
+                        </svg>
+                        <span class="number-value" id="hours">00</span>
+                    </div>
+                    <span class="unit-label">Saat</span>
+                </div>
+
+                <div class="unit-card">
+                    <div class="ring-wrapper">
+                        <svg class="progress-ring" viewBox="0 0 104 104">
+                            <circle class="progress-ring-bg" cx="52" cy="52" r="47"></circle>
+                            <circle class="progress-ring-fill" id="ring-minutes" cx="52" cy="52" r="47"></circle>
+                        </svg>
+                        <span class="number-value" id="minutes">00</span>
+                    </div>
+                    <span class="unit-label">Dakika</span>
+                </div>
+
+                <div class="unit-card">
+                    <div class="ring-wrapper">
+                        <svg class="progress-ring" viewBox="0 0 104 104">
+                            <circle class="progress-ring-bg" cx="52" cy="52" r="47"></circle>
+                            <circle class="progress-ring-fill" id="ring-seconds" cx="52" cy="52" r="47"></circle>
+                        </svg>
+                        <span class="number-value" id="seconds">00</span>
+                    </div>
+                    <span class="unit-label">Saniye</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="celebration-box" id="celebrationBox">
+            <div class="celebration-emoji">🎉</div>
+            <h2 class="celebration-title">YENGENİZ GELDİ!</h2>
+            <p class="subtitle" style="margin-bottom: 20px;">😍😍😍 GERİ SAYIM TAMAMLANDI 😍😍😍</p>
+            <button class="test-btn" id="resetViewBtn" style="display:none;" onclick="resetPreview()">Sayaca Geri Dön</button>
+        </div>
+
+        <footer class="footer-bar">
+            <span class="timezone-info" id="tzDisplay">Saat Dilimi: Yükleniyor...</span>
+            <button class="test-btn" id="previewBtn" onclick="triggerCelebration(true)">✨ Konfeti Önizle</button>
+        </footer>
+    </main>
+
+    <script>
+        // Hedef: 24 Aralık 2026 00:00 (yerel saat). Ay 0'dan başlar: 11 = Aralık
+        const targetDate = new Date(2026, 11, 24, 0, 0, 0).getTime();
+        const startDate = new Date(2026, 0, 1, 0, 0, 0).getTime();
+        const totalSpan = targetDate - startDate;
+        const totalDays = Math.ceil(totalSpan / 86400000);
+
+        const circumference = 2 * Math.PI * 47;
+        let isFinished = false;
+        let isPreview = false;
+        let lastSecond = -1;
+        let timer = null;
+        let confettiLoop = null;
+        const ringState = {};
+
+        const el = (id) => document.getElementById(id);
+
+        try {
+            const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            el("tzDisplay").innerText = `Saat Dilimi: ${tz}`;
+        } catch (e) {
+            el("tzDisplay").innerText = "Yerel Saat Aktif";
+        }
+
+        // Arka plan slayt gösterisi
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 6000);
+
+        // Halka: değer başa sardığında (örn. saniye 00 -> 59) geri dönüş animasyonu
+        // yapmadan anında atlar, sonra yumuşak animasyona devam eder.
+        function setRingProgress(id, fraction) {
+            const circle = el(id);
+            if (!circle) return;
+            const f = Math.max(0, Math.min(1, fraction));
+            const prev = ringState[id];
+            ringState[id] = f;
+            const offset = circumference * (1 - f);
+            if (prev !== undefined && f > prev) {
+                circle.style.transition = "none";
+                circle.style.strokeDashoffset = offset;
+                circle.getBoundingClientRect(); // reflow
+                circle.style.transition = "";
+            } else {
+                circle.style.strokeDashoffset = offset;
+            }
+        }
+
+        function setText(id, value) {
+            const node = el(id);
+            const text = String(value).padStart(2, '0');
+            if (node.innerText !== text) node.innerText = text;
+        }
+
+        function fireConfetti(big) {
+            if (typeof confetti !== "function") return;
+            const colors = ['#fda4af', '#f9a8d4', '#d8b4fe', '#a5b4fc', '#fde68a', '#ffffff'];
+            const end = Date.now() + (big ? 4000 : 1500);
+            confetti({ particleCount: big ? 140 : 60, spread: 100, origin: { y: 0.6 }, colors });
+            (function frame() {
+                confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0, y: 0.7 }, colors });
+                confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1, y: 0.7 }, colors });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        function triggerCelebration(preview = false) {
+            isPreview = preview;
+            document.body.classList.add("celebrating");
+            el("countdownContainer").style.display = "none";
+            el("celebrationBox").classList.add("active");
+            el("statusText").innerText = preview ? "ÖNİZLEME MODU" : "YENGENİZ GELDİ";
+            el("previewBtn").style.display = "none";
+            el("resetViewBtn").style.display = preview ? "inline-block" : "none";
+            if (!preview) document.title = "YENGENİZ GELDİ! 🎉";
+
+            fireConfetti(true);
+            clearInterval(confettiLoop);
+            confettiLoop = setInterval(() => fireConfetti(false), preview ? 5000 : 7000);
+        }
+
+        function resetPreview() {
+            isPreview = false;
+            clearInterval(confettiLoop);
+            confettiLoop = null;
+            document.body.classList.remove("celebrating");
+            el("celebrationBox").classList.remove("active");
+            el("countdownContainer").style.display = "block";
+            el("statusText").innerText = "CANLI GERİ SAYIM";
+            el("resetViewBtn").style.display = "none";
+            el("previewBtn").style.display = "inline-block";
+            updateCountdown();
+        }
+
+        function updateCountdown() {
+            const now = Date.now();
+            const distance = targetDate - now;
+
+            // Kalan tam saniye (yukarı yuvarlanır: son saniyede 00:00:00:01 görünür, sonra biter)
+            const remaining = Math.ceil(distance / 1000);
+
+            if (remaining <= 0) {
+                if (!isFinished) {
+                    isFinished = true;
+                    clearTimeout(timer);
+                    ["days", "hours", "minutes", "seconds"].forEach(id => setText(id, 0));
+                    triggerCelebration(false);
+                }
+                return false;
+            }
+
+            if (isPreview) return true; // önizlemede ekranı ellemeyelim, sayım arkada sürsün
+
+            const days = Math.floor(remaining / 86400);
+            const hours = Math.floor((remaining % 86400) / 3600);
+            const minutes = Math.floor((remaining % 3600) / 60);
+            const seconds = remaining % 60;
+
+            setText("days", days);
+            setText("hours", hours);
+            setText("minutes", minutes);
+            setText("seconds", seconds);
+
+            if (seconds !== lastSecond) {
+                lastSecond = seconds;
+                const secEl = el("seconds");
+                secEl.classList.add("tick");
+                setTimeout(() => secEl.classList.remove("tick"), 220);
+            }
+
+            setRingProgress("ring-days", days / totalDays);
+            setRingProgress("ring-hours", hours / 24);
+            setRingProgress("ring-minutes", minutes / 60);
+            setRingProgress("ring-seconds", seconds / 60);
+
+            return true;
+        }
+
+        // Saniye sınırına hizalı zamanlayıcı: setInterval gibi kayma yapmaz,
+        // sekme arka plandan dönünce de hemen doğru değeri gösterir.
+        function schedule() {
+            if (!updateCountdown()) return;
+            const delay = 1000 - (Date.now() % 1000) + 15;
+            timer = setTimeout(schedule, delay);
+        }
+
+        document.addEventListener("visibilitychange", () => {
+            if (!document.hidden && !isFinished) {
+                clearTimeout(timer);
+                schedule();
+            }
+        });
+
+        schedule();
+    </script>
+</body>
+</html>

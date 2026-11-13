@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Ana sayfa: public/index.html (yengeniz geri sayım sayacı)
+  async rewrites() {
+    return {
+      beforeFiles: [{ source: "/", destination: "/index.html" }],
+    };
+  },
 };
 
 export default nextConfig;
